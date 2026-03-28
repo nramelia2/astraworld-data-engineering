@@ -33,11 +33,7 @@ def create_datamart_service():
         ON a.customer_id = ca.customer_id
 
     WHERE 
-        c.data_quality IN ('VALID', 'COMPANY')
-        AND (
-            c.dob IS NOT NULL
-            AND YEAR(c.dob) != 1900
-        )
+        c.is_active = 1 
 
     GROUP BY 
         YEAR(a.service_date), a.vin, c.name;
