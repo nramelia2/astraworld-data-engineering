@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql_dwh
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: dwh
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  python:
+    build: ./app
+    container_name: etl_job
+    depends_on:
+      - mysql
+    volumes:
+      - ./data:/data
+    working_dir: /app
+    command: python ingest.py
+
+volumes:
+  mysql_data:
